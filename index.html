@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main page</title>
+    <style>
+        * {
+            margin: 0%;
+        }
+        nav {
+            background-color: teal;
+            display: flex;
+            justify-content: space-evenly;
+            height: 70px;
+            align-items: center;
+        }
+        nav>a {
+            text-decoration: none;
+            font-size: 30px;
+            color: red;
+        }
+        select {
+            height: 10%;
+            width: 40%;
+            margin-left: 30%;
+            margin-top: 1%;
+            font-size: 20px;
+        }
+        #container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 80%;
+            height: 450px;
+            margin: auto;
+            margin-top: 20px;
+        }
+        #container>div>img {
+            width: 100%;
+        }
+        body{
+            background-image: 
+            url(https://media.istockphoto.com/vectors/abstract-blurred-colorful-background-vector-id1248542684?k=20&m=1248542684&s=612x612&w=0&h=1yKiRrtPhiqUJXS_yJDwMGVHVkYRk2pJX4PG3TT4ZYM=);
+        }
+
+        @media all and (min-width:200px ) and (max-width:450px ){
+            #container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        @media all and (min-width:450px ) and (max-width:850px ){
+            #container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#">FOOD APPLICATION</a>
+    </nav>
+
+    <select name="food" id="food" onchange="search()">
+        <option id="search" value="sbc">Search By Category</option>
+        <option value="Beef">Beef</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Chicken">Chicken</option>
+        <option value="Dessert">Dessert</option>
+        <option value="Goat">Goat</option>
+        <option value="Lamb">Lamb</option>
+        <option value="Miscellaneous">Miscellaneous</option>
+        <option value="Pasta">Pasta</option>
+        <option value="Pork">Pork</option>
+        <option value="Seafood">Seafood</option>
+        <option value="Side">Side</option>
+        <option value="Starter">Starter</option>
+        <option value="Vegan">Vegan</option>
+        <option value="Vegetarian">Vegetarian</option>
+    </select>
+
+    <div id="container">
+
+    </div>
+</body>
+
+<script>
+
+
+
+    const search = async () => {
+        try {
+            let food="Beef";
+            food = document.getElementById("food").value;
+            console.log(food);
+            const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${food}`;
+            let res = await fetch(url);
+            let data = await res.json();
+            console.log(data.meals)
+            displayData(data.meals);
+            localStorage.setItem("categoryData", JSON.stringify(data));
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    const displayData = (data) => {
+        const container = document.getElementById("container");
+        container.innerText = " ";
+        data.forEach(data => {
+            const foodbox = document.createElement("div");
+            const foodimg = document.createElement("img");
+            foodimg.src = data.strMealThumb;
+            const foodname = document.createElement("p");
+            foodname.innerText = "Name : " + data.strMeal;
+
+            foodbox.append(foodimg, foodname);
+
+            container.append(foodbox);
+
+        });
+    }
+
+
+
+</script>
+
+</html>
